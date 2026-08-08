@@ -1,61 +1,85 @@
 <!DOCTYPE html>
-<html  lang="pt-br">
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - DNA Training</title>
+    <link rel="icon" href="dnaLogo.png" type="image/png">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
 
-    <head>
-        <link rel="stylesheet" href="reset.css">
-        <link rel="stylesheet" href="produtos.css">
-        <link rel="stylesheet" href="contato.css">
-        <meta charset ="UTF-8">
-        <title> Produtos - DNA Training </title>
-    </head>
+<body>
+    <header>
+        <div class="caixa">
+            <h1><a href="index.html"><img src="dnaLogo.png" alt="Logo da Academia DNA Training"></a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <main>
+        <section class="tituloPagina">
+            <h2>Planos de Treinamento</h2>
+        </section>
 
-    <body>
-        <header>
-               <div class="caixa"> 
-                   <h1><img src="dnaLogo.png"></h1> 
-                    <nav>
-                        <ul>
-                            
-                            <li><a href="Academia DNA.html">Home</a></li>
-                            <li><a href = "produtos.html"> Produtos</a></li>
-                            <li><a href = "contato.html">Contato</a></li> 
-
-                        </ul>
-                     </nav>
-                </div>
-        </header>
-
-        <main>
-            <ul class = "produtos">
+        <div class="galeria-canvas" id="galeria-canvas" title="Galeria 3D: torne as modalidades"></div>
+        <noscript>
+            <ul class="produtos">
                 <li>
                     <h2>Kids</h2>
-                    <img src="dnaLogo.png">
-                    <p class = "produtoDescricao">Idade até 12 anos </p>
-                    <p class = "produtoPreco">R$ 185,00</p>
+                    <img src="DNA kids.jpg" alt="Criança praticando Krav Maga no plano Kids">
+                    <p class="produtoDescricao">Idade até 12 anos</p>
+                    <p class="produtoPreco">R$ 185,00</p>
                 </li>
                 <li>
                     <h2>Adolescentes</h2>
-                    <img src="dnaLogo.png">
-                    <p class = "produtoDescricao">Idade entre 12 aos 17 anos</p>
-                 <p class = "produtoPreco">R$ 185,00</p>
+                    <img src="dna5.jpeg" alt="Adolescente praticando Krav Maga">
+                    <p class="produtoDescricao">Idade entre 12 e 17 anos</p>
+                    <p class="produtoPreco">R$ 185,00</p>
                 </li>
                 <li>
                     <h2>Adulto</h2>
-                    <img src="dnaLogo.png">
-                    <p class = "produtoDescricao">A partir dos 18 anos</p>
-                    <p class = "produtoPreco">R$ 185,00</p>
+                    <img src="dna4.jpeg" alt="Adulto em treinamento de Krav Maga">
+                    <p class="produtoDescricao">A partir dos 18 anos</p>
+                    <p class="produtoPreco">R$ 185,00</p>
                 </li>
-                
-                
             </ul>
-            
-        </main>
-        <footer>
-            <img src="dnaLogo.png">
-            <p class="copyright">&copy; Copyright DNA Training - 2020</p>
-        </footer>
-    </body>
-    </html>
+        </noscript>
 
-  
+        <section class="beneficios">
+            <h3 class="tituloCentralizado">Diferenciais</h3>
+            <div class="conteudoBeneficios">
+                <ul class="listaBeneficios">
+                    <li class="itens">Treinamento completo em defesa pessoal</li>
+                    <li class="itens">Aulas para todas as idades</li>
+                    <li class="itens">Professores certificados Bukan</li>
+                </ul>
+                <div id="galeriaBeneficios-canvas" class="carrossel-canvas" title="Rotação 3D das imagens da academia">
+                    <noscript><img src="dna2.jpeg" class="imagemBeneficios" alt="Utensílios da academia"></noscript>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <img src="dnaLogo.png" alt="Logo da DNA Training">
+        <p class="copyright">&copy; Copyright DNA Training - 2026</p>
+    </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./js/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module" src="js/galeria.js"></script>
+</body>
+</html>

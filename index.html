@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Training — Krav Maga Zona Sul</title>
+    <link rel="icon" href="dnaLogo.png" type="image/png">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="caixa">
+            <h1><a href="index.html"><img src="dnaLogo.png" alt="Logo da Academia DNA Training"></a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero 3D (three.js) -->
+        <section class="hero" aria-hidden="false">
+            <div id="hero-canvas" class="hero-canvas" title="Estrutura de DNA rotativa com as imagens da academia"></div>
+            <div class="hero-overlay">
+                <h2 class="tituloPrincipal">Sobre Academia DNA</h2>
+                <p class="hero-sub">Treinamento de <strong>Krav-Maga Bukan</strong> · Zona Sul de São Paulo</p>
+            </div>
+            <noscript>
+                <div class="hero-fallback">
+                    <img class="banner" src="dna1.jpeg" alt="Banner com a estrutura da academia DNA Training">
+                </div>
+            </noscript>
+        </section>
+
+        <section class="principal">
+            <p>Localizada na Zona Sul de São Paulo, a DNA Training é referência em treinamento de <strong>Krav-Maga Bukan</strong>, fundada em <strong>2018</strong>.</p>
+            <p id="missao">Nossa missão é <strong>"Proporcionar a autoestima e qualidade de vida."</strong></p>
+            <p>Oferecemos professores especializados no treinamento para situações de risco e no condicionamento físico completo.</p>
+        </section>
+
+        <section class="beneficios">
+            <h3 class="tituloCentralizado">Benefícios</h3>
+            <div class="conteudoBeneficios">
+                <ul class="listaBeneficios">
+                    <li class="itens">Condicionamento Físico</li>
+                    <li class="itens">Espaço Diferenciado</li>
+                    <li class="itens">Localização</li>
+                    <li class="itens">Profissionais Qualificados</li>
+                    <li class="itens">Pontualidade</li>
+                    <li class="itens">Limpeza</li>
+                </ul>
+                <div id="carrossel-canvas" class="carrossel-canvas" title="Carrossel 3D de imagens DNA">
+                    <noscript>
+                        <img src="dna.jpg" class="imagemBeneficios" alt="Equipamentos e estrutura da academia">
+                    </noscript>
+                </div>
+            </div>
+        </section>
+
+        <section class="mapa">
+            <h3 class="tituloCentralizado">Nossa localização</h3>
+            <p>Nossa academia está localizada na Zona Sul de São Paulo.</p>
+            <div class="mapaConteudo">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3654.3043517132255!2d-46.756272185381256!3d-23.665071571314723!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5391ed8bb4a5%3A0x3fa0c0148cb073cb!2sDNA%20Training%20-%20Krav%20Maga%20Zona%20Sul!5e0!3m2!1spt-BR!2sbr!4v1610304522492!5m2!1spt-BR!2sbr" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa da DNA Training na Zona Sul"></iframe>
+            </div>
+        </section>
+
+        <section class="video">
+            <h3 class="tituloCentralizado">Conheça a DNA Training</h3>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/9gp3FMUvTzw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Vídeo de divulgação da Academy DNA"></iframe>
+        </section>
+    </main>
+
+    <footer>
+        <img src="dnaLogo.png" alt="Logo da DNA Training">
+        <p class="copyright">&copy; Copyright DNA Training - 2026</p>
+    </footer>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./js/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module" src="js/hero.js"></script>
+</body>
+</html>

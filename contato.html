@@ -1,101 +1,108 @@
 <!DOCTYPE html>
-<html  lang="pt-br">
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - DNA Training</title>
+    <link rel="icon" href="dnaLogo.png" type="image/png">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
 
-    <head>
-        <link rel="stylesheet" href="reset.css">
-        <link rel="stylesheet" href="produtos.css">
-        <link rel="stylesheet" href="contato.css">
-        <meta charset ="UTF-8">
-        <title> Contato - DNA Training </title>
-    </head>
+<body>
+    <header>
+        <div class="caixa">
+            <h1><a href="index.html"><img src="dnaLogo.png" alt="Logo da Academia DNA Training"></a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
+    <main class="contato">
+        <section class="tituloPagina">
+            <h2>Fale com a DNA Training</h2>
+        </section>
 
-    <body>
-        <header>
-               <div class="caixa"> 
-                   <h1><img src="dnaLogo.png" alt="Logo da Academia DNA"></h1> 
-                    <nav>
-                        <ul>
-                                                    
-                    <li><a href="Academia DNA.html">Home</a></li> 
-                    <li><a href = "produtos.html"> Produtos</a></li>
-                   <li><a href = "contato.html">Contato</a></li> 
+        <div id="particulas-canvas" class="particulas-canvas" title="Partículas DNA flutuantes ao fundo"></div>
 
+        <form action="#" method="POST">
+            <fieldset>
+                <legend>Dados pessoais</legend>
+                <label for="nomeSobrenome">Nome e sobrenome:</label>
+                <input type="text" id="nomeSobrenome" class="inputPadrao" required autocomplete="name">
 
-                        </ul>
-                     </nav>
-                </div>
-        </header>
-        <main>
-                <form>
+                <label for="email">Email:</label>
+                <input type="email" id="email" class="inputPadrao" required placeholder="seunome@dominio.com" autocomplete="email">
 
-                    <div>
-                        <label for="nomeSobrenome">Nome e sobrenome:</label>
-                        <input type="text" id = "nomeSobrenome" class="inputPadrao" required>
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" class="inputPadrao" required placeholder="(xx) xxxxx-xxxx" autocomplete="tel">
 
-                        <label for= "email"> Email:</label>
-                        <input type="email" id ="email" class="inputPadrao" required placeholder="seunome@dominio.com">
+                <label for="mensagem">Mensagem:</label>
+                <textarea rows="10" id="mensagem" class="inputPadrao" required></textarea>
+            </fieldset>
 
-                        <label for ="telefone">Telefone:</label>
-                        <input type="tel" id = "telefone" class="inputPadrao" required placeholder="(xx) xxxxx-xxxx">
+            <fieldset>
+                <legend>Como prefere o nosso contato?</legend>
+                <label for="radioEmail"><input type="radio" name="contato" value="email" id="radioEmail">Email</label>
+                <label for="radioTelefone"><input type="radio" name="contato" value="Telefone" id="radioTelefone">Telefone</label>
+                <label for="radioWhatsapp"><input type="radio" name="contato" value="Whatsapp" id="radioWhatsapp" checked>Whatsapp</label>
+            </fieldset>
 
-                        <label for = "mensagem"> Mensagem:</label>
-                        <textarea cols="30" rows="10" id ="mensagem" class="inputPadrao" required> </textarea>
-                    </div>
+            <fieldset>
+                <legend>Qual horário pretende treinar?</legend>
+                <select id="horario">
+                    <option>Manhã</option>
+                    <option>Tarde</option>
+                    <option>Noite</option>
+                </select>
+                <label class="checkbox"><input type="checkbox" checked> Gostaria de receber nossas novidades por email?</label>
+                <input type="submit" value="Enviar formulário" class="enviar">
+            </fieldset>
+        </form>
 
+        <table>
+            <caption>Horários de aula</caption>
+            <thead>
+                <tr>
+                    <th>Dia</th>
+                    <th>Horário</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Terças</td>
+                    <td>7h ~ 22h</td>
+                </tr>
+                <tr>
+                    <td>Quartas</td>
+                    <td>18h ~ 22h</td>
+                </tr>
+                <tr>
+                    <td>Quintas</td>
+                    <td>7h ~ 22h</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
 
-                    <fieldset>    
-                        <legend>Como prefere o nosso contato?</legend>
-                            <label for="radioEmail"><input type="radio" name="contato" value="email" id="radioEmail">Email</label>
-                            
-                            <label for="radioTelefone"><input type="radio" name="contato"  value="Telefone" id="radioTelefone">Telefone</label>
-                            
-                            <label for="radioWhatsapp"><input type="radio" name="contato"  value="Whatsapp" id="radioWhatsapp" checked>Whatsapp</label>
-                    </fieldset>
-                    
-                    <fieldset>
-                        <legend>Qual horário pretente treinar?</legend>
-                            <select>
-                                <option> Manhã</option>
-                                <option>Tarde</option>
-                                <option>Noite</option>
-                            </select>    
-                                <label class="checkbox"><input type="checkbox" checked> Gostaria de receber nossas novidades por email?</label> 
+    <footer>
+        <img src="dnaLogo.png" alt="Logo da DNA Training">
+        <p class="copyright">&copy; Copyright DNA Training - 2026</p>
+    </footer>
 
-                                <input type="submit" value="Enviar fomulário" class="enviar">
-                    </fieldset>
-                
-                </form>
-
-                <table>  
-                    <thead>                  
-                        <tr>
-                            <th>Dia</th>
-                            <th>Horário</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>Terças</td>
-                            <td> 7h ~ 22h</td>
-                        </tr>
-                        <tr>
-                            <td>Quartas</td>
-                            <td>18h ~ 22h</td>
-                        </tr>
-                        <tr>
-                            <td>Quintas</td>
-                            <td> 7h ~ 22h</td>
-                    </tbody>
-                </table>
-
-        </main>
-        <footer>
-            <img src="dnaLogo.png" alt="Logo da Academia DNA">
-            <p class="copyright">&copy; Copyright DNA Training - 2020</p>
-        </footer>
-    </body>
-    </html>
-
-<!-- site para conversão para celulares: mobile input type-->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "./js/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module" src="js/contato.js"></script>
+</body>
+</html>
