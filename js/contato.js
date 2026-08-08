@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createRenderer, watchResize, addStars, loadTexture } from './core.js';
+import { createRenderer, watchResize, addStars, loadTexture, loopWhenVisible, disposeScene } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* PARTÍCULAS DNA: dupla hélice de pontos em looping no fundo          */
@@ -7,7 +7,7 @@ import { createRenderer, watchResize, addStars, loadTexture } from './core.js';
 function particulas() {
   const mount = document.getElementById('particulas-canvas');
   if (!mount) return;
-  const renderer = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0, 9);
@@ -77,7 +77,7 @@ function particulas() {
   });
 
   const clock = new THREE.Clock();
-  function animate() {
+  const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
     points.rotation.y += dt * 0.25;
@@ -92,10 +92,21 @@ function particulas() {
     });
 
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-  watchResize(renderer, camera, mount);
+  });
+
+  const stopResize = watchResize(renderer, camera, mount);
+
+  // Cleanup on mount removal
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(mount)) {
+      stopLoop();
+      stopResize();
+      cleanupRenderer();
+      disposeScene(scene);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 if (document.readyState === 'loading') {

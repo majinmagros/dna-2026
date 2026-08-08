@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, loadTexture, createPhotoPlane, setPhoto, addStars } from './core.js';
+import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* HERO: dupla hélice de DNA feita de fotos do repositório (loop)      */
@@ -8,7 +8,7 @@ import { createRenderer, watchResize, loadTexture, createPhotoPlane, setPhoto, a
 function initHero() {
   const mount = document.getElementById('hero-canvas');
   if (!mount) return;
-  const renderer = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(60, mount.clientWidth / mount.clientHeight, 0.1, 200);
@@ -98,14 +98,14 @@ function initHero() {
   helix.add(ringB);
 
   const clock = new THREE.Clock();
-  function animate() {
+  const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
 
     helix.rotation.y += dt * 0.3;
     helix.children.forEach((rung, i) => {
       const d = rung.userData;
-      rung.position.y = d.off + Math.sin(t * d.speed + i) * 0.5;
+      rung.position.y = d.offY + Math.sin(t * d.spin + i) * 0.5;
       const r = 0.06;
       rung.rotation.x = Math.sin(t * 0.4 + i) * r;
       rung.rotation.z = Math.cos(t * 0.4 + i) * r;
@@ -116,69 +116,91 @@ function initHero() {
 
     controls.update();
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-  watchResize(renderer, camera, mount);
+  });
+
+  const stopResize = watchResize(renderer, camera, mount);
+
+  // Cleanup on mount removal
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(mount)) {
+      stopLoop();
+      stopResize();
+      cleanupRenderer();
+      disposeScene(scene);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 /* ------------------------------------------------------------------ */
-/* CARROSSEL 3D: looping de imagens (seção benefícios)                 */
+/* CARROSSEL 3D: looping de imagens (seção benefícios) — InstancedMesh */
 /* ------------------------------------------------------------------ */
-function carrossel() {
+async function carrossel() {
   const mount = document.getElementById('carrossel-canvas');
   if (!mount) return;
-  const renderer = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0.8, 6);
 
   const imgs = ['dna.jpg', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'DNA kids.jpg', 'imagem1.jpg'];
-  const group = new THREE.Group();
-  scene.add(group);
-  const cards = [];
 
-  imgs.forEach((src, i) => {
-    const angle = (i / imgs.length) * Math.PI * 2;
-    loadTexture(src).then((tex) => {
-      const img = tex.image;
-      const ar = img.width / img.height;
-      const geo = new THREE.PlaneGeometry(1.9 * ar, 1.9);
-      const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, depthWrite: false });
-      const plane = new THREE.Mesh(geo, mat);
-      group.add(plane);
-      cards.push({ plane, angle, src });
-    }).catch(() => {});
-  });
+  // Create texture atlas and instanced mesh
+  const { texture: atlasTexture, uvRects } = await createTextureAtlas(imgs);
+  if (!atlasTexture) return;
+
+  const { mesh, dummy, updateInstanceMatrix, setInstanceOpacity } = createCarouselInstancedMesh(uvRects, imgs.length);
+  mesh.material.uniforms.uAtlas.value = atlasTexture;
+  scene.add(mesh);
 
   addStars(scene, 300, 16);
 
   const clock = new THREE.Clock();
-  function animate() {
+  const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
-    group.rotation.y += dt * 0.45;
 
-    cards.forEach(({ plane, angle }) => {
-      const a = angle + group.rotation.y;
+    imgs.forEach((src, i) => {
+      const angle = (i / imgs.length) * Math.PI * 2;
+      const a = angle + t * 0.45;
       const r = 2.5;
-      plane.position.set(Math.cos(a) * r, Math.sin(t * 0.6 + angle) * 0.3, Math.sin(a) * r);
-      plane.rotation.set(0, a + Math.PI / 2, 0);
+      const x = Math.cos(a) * r;
+      const y = Math.sin(t * 0.6 + angle) * 0.3;
+      const z = Math.sin(a) * r;
+      
+      dummy.position.set(x, y, z);
+      dummy.rotation.set(0, a + Math.PI / 2, 0);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+
       const behind = Math.sin(a) > 0.2;
-      plane.material.opacity = behind ? 0.3 : 1;
-      plane.scale.setScalar(1);
+      setInstanceOpacity(i, behind ? 0.3 : 1);
     });
+    mesh.instanceMatrix.needsUpdate = true;
 
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-  watchResize(renderer, camera, mount);
+  });
+
+  const stopResize = watchResize(renderer, camera, mount);
+
+  // Cleanup on mount removal
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(mount)) {
+      stopLoop();
+      stopResize();
+      cleanupRenderer();
+      disposeScene(scene);
+      atlasTexture.dispose();
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 function start() {
   initHero();
-  carrossel();
+  carrossel(); // async, no need to await
 }
 
 if (document.readyState === 'loading') {

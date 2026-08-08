@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, loadTexture, setPhoto, addStars } from './core.js';
+import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh } from './core.js';
 
 /* ------------------------------------------------------------------ */
-/* GALERIA 3D: imagens em anel orbitante (interativo)                  */
+/* GALERIA 3D: imagens em anel orbitante (interativo) — InstancedMesh  */
 /* ------------------------------------------------------------------ */
-function galeria() {
+async function galeria() {
   const mount = document.getElementById('galeria-canvas');
   if (!mount) return;
-  const renderer = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 1.2, 7);
@@ -24,42 +24,56 @@ function galeria() {
   addStars(scene, 400, 20);
 
   const imgs = ['DNA kids.jpg', 'dna5.jpeg', 'dna6.jpeg', 'dna4.jpeg', 'dna3.jpeg', 'dna2.jpeg'];
-  const group = new THREE.Group();
-  scene.add(group);
-  const cards = [];
 
-  imgs.forEach((src, i) => {
-    const angle = (i / imgs.length) * Math.PI * 2;
-    loadTexture(src).then((tex) => {
-      const img = tex.image;
-      const ar = img.width / img.height;
-      const geo = new THREE.PlaneGeometry(1.5 * ar, 1.5);
-      const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, depthWrite: false });
-      const plane = new THREE.Mesh(geo, mat);
-      group.add(plane);
-      cards.push({ plane, angle });
-    }).catch(() => {});
-  });
+  // Create texture atlas and instanced mesh
+  const { texture: atlasTexture, uvRects } = await createTextureAtlas(imgs);
+  if (!atlasTexture) return;
+
+  const { mesh, dummy, setInstanceOpacity } = createCarouselInstancedMesh(uvRects, imgs.length, 1.5, 1.5);
+  mesh.material.uniforms.uAtlas.value = atlasTexture;
+  scene.add(mesh);
 
   const clock = new THREE.Clock();
-  function animate() {
+  const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
 
-    cards.forEach(({ plane, angle }) => {
-      const a = angle + group.rotation.y;
+    imgs.forEach((src, i) => {
+      const angle = (i / imgs.length) * Math.PI * 2;
+      const a = angle + t * 0.4; // group.rotation.y is now handled per-instance
       const r = 2.8;
-      plane.position.set(Math.cos(a) * r, Math.sin(t * 0.4 + angle) * 0.4, Math.sin(a) * r);
-      plane.rotation.set(0, a + Math.PI / 2, 0);
-      plane.material.opacity = Math.abs(Math.sin(a)) > 0.6 ? 0.3 : 1;
+      const x = Math.cos(a) * r;
+      const y = Math.sin(t * 0.4 + angle) * 0.4;
+      const z = Math.sin(a) * r;
+      
+      dummy.position.set(x, y, z);
+      dummy.rotation.set(0, a + Math.PI / 2, 0);
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+
+      const opacity = Math.abs(Math.sin(a)) > 0.6 ? 0.3 : 1;
+      setInstanceOpacity(i, opacity);
     });
+    mesh.instanceMatrix.needsUpdate = true;
 
     controls.update();
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-  watchResize(renderer, camera, mount);
+  });
+
+  const stopResize = watchResize(renderer, camera, mount);
+
+  // Cleanup on mount removal
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(mount)) {
+      stopLoop();
+      stopResize();
+      cleanupRenderer();
+      disposeScene(scene);
+      atlasTexture.dispose();
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 /* ------------------------------------------------------------------ */
@@ -68,7 +82,7 @@ function galeria() {
 function beneficiosMini() {
   const mount = document.getElementById('galeriaBeneficios-canvas');
   if (!mount) return;
-  const renderer = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0, 4.5);
@@ -94,15 +108,26 @@ function beneficiosMini() {
   });
 
   const clock = new THREE.Clock();
-  function animate() {
+  const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     cube.rotation.x += dt * 0.25;
     cube.rotation.y += dt * 0.4;
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
-  }
-  animate();
-  watchResize(renderer, camera, mount);
+  });
+
+  const stopResize = watchResize(renderer, camera, mount);
+
+  // Cleanup on mount removal
+  const observer = new MutationObserver(() => {
+    if (!document.body.contains(mount)) {
+      stopLoop();
+      stopResize();
+      cleanupRenderer();
+      disposeScene(scene);
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 function start() {
