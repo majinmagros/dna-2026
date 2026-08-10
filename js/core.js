@@ -2,8 +2,18 @@ import * as THREE from 'three';
 
 export const TAU = Math.PI * 2;
 
+export function prefersReducedMotion() {
+  return typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function createRenderer(el, opts = {}) {
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: true,
+    powerPreference: 'high-performance',
+    failIfMajorPerformanceCaveat: false
+  });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   el.appendChild(renderer.domElement);
@@ -13,6 +23,7 @@ export function createRenderer(el, opts = {}) {
 
 export function loopWhenVisible(el, tick) {
   let running = false;
+  let hidden = document.hidden;
   function step() {
     if (!running) return;
     tick();
@@ -20,12 +31,21 @@ export function loopWhenVisible(el, tick) {
   }
   const start = () => { if (!running) { running = true; step(); } };
   const stop = () => { running = false; };
-  if (typeof IntersectionObserver === 'undefined') { start(); return stop; }
+  const onVisibility = () => {
+    hidden = document.hidden;
+    if (hidden) stop();
+    else start();
+  };
+  document.addEventListener('visibilitychange', onVisibility);
+  if (typeof IntersectionObserver === 'undefined') { start(); return () => { stop(); document.removeEventListener('visibilitychange', onVisibility); }; }
   const io = new IntersectionObserver((entries) => {
-    for (const e of entries) (e.isIntersecting ? start : stop)();
+    for (const e of entries) {
+      if (e.isIntersecting) start();
+      else stop();
+    }
   });
   io.observe(el);
-  return () => { stop(); io.disconnect(); };
+  return () => { stop(); io.disconnect(); document.removeEventListener('visibilitychange', onVisibility); };
 }
 
 export function disposeObject(obj) {

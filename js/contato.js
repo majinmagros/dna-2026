@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createRenderer, watchResize, addStars, loadTexture, loopWhenVisible, disposeScene } from './core.js';
+import { createRenderer, watchResize, addStars, loadTexture, loopWhenVisible, disposeScene, prefersReducedMotion } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* PARTÍCULAS DNA: dupla hélice de pontos em looping no fundo          */
@@ -75,21 +75,30 @@ function particulas() {
       sprites.push(s);
     }).catch(() => {});
   });
-
-  const clock = new THREE.Clock();
+const clock = new THREE.Clock();
+  const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
-    points.rotation.y += dt * 0.25;
-    points.rotation.x = 0.35;
 
-    sprites.forEach((s, i) => {
-      const d = s.userData;
-      const a = d.a + t * 0.3;
-      s.position.set(Math.cos(a) * d.radius, d.y0 + Math.sin(t * 0.5 + i) * 0.6, Math.sin(a) * d.radius);
-      s.lookAt(camera.position);
-      s.rotation.z = 0;
-    });
+    if (!reduced) {
+      points.rotation.y += dt * 0.25;
+      points.rotation.x = 0.35;
+
+      sprites.forEach((s, i) => {
+        const d = s.userData;
+        const a = d.a + t * 0.3;
+        s.position.set(Math.cos(a) * d.radius, d.y0 + Math.sin(t * 0.5 + i) * 0.6, Math.sin(a) * d.radius);
+        s.lookAt(camera.position);
+        s.rotation.z = 0;
+      });
+    } else {
+      sprites.forEach((s) => {
+        const d = s.userData;
+        s.position.set(Math.cos(d.a) * d.radius, d.y0, Math.sin(d.a) * d.radius);
+        s.lookAt(camera.position);
+      });
+    }
 
     renderer.render(scene, camera);
   });

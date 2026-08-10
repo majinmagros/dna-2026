@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh } from './core.js';
+import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* HERO: dupla hélice de DNA feita de fotos do repositório (loop)      */
@@ -98,25 +98,31 @@ function initHero() {
   helix.add(ringB);
 
   const clock = new THREE.Clock();
-  const stopLoop = loopWhenVisible(mount, () => {
+  const reduced = prefersReducedMotion();
+
+  const renderFrame = () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
 
-    helix.rotation.y += dt * 0.3;
-    helix.children.forEach((rung, i) => {
-      const d = rung.userData;
-      rung.position.y = d.offY + Math.sin(t * d.spin + i) * 0.5;
-      const r = 0.06;
-      rung.rotation.x = Math.sin(t * 0.4 + i) * r;
-      rung.rotation.z = Math.cos(t * 0.4 + i) * r;
-    });
+    if (!reduced) {
+      helix.rotation.y += dt * 0.3;
+      helix.children.forEach((rung, i) => {
+        const d = rung.userData;
+        rung.position.y = d.offY + Math.sin(t * d.spin + i) * 0.5;
+        const r = 0.06;
+        rung.rotation.x = Math.sin(t * 0.4 + i) * r;
+        rung.rotation.z = Math.cos(t * 0.4 + i) * r;
+      });
 
-    ringA.rotation.x += dt * 0.12;
-    ringB.rotation.y -= dt * 0.15;
+      ringA.rotation.x += dt * 0.12;
+      ringB.rotation.y -= dt * 0.15;
+    }
 
     controls.update();
     renderer.render(scene, camera);
-  });
+  };
+
+  const stopLoop = loopWhenVisible(mount, renderFrame);
 
   const stopResize = watchResize(renderer, camera, mount);
 
@@ -157,27 +163,30 @@ async function carrossel() {
   addStars(scene, 300, 16);
 
   const clock = new THREE.Clock();
+  const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
 
-    imgs.forEach((src, i) => {
-      const angle = (i / imgs.length) * Math.PI * 2;
-      const a = angle + t * 0.45;
-      const r = 2.5;
-      const x = Math.cos(a) * r;
-      const y = Math.sin(t * 0.6 + angle) * 0.3;
-      const z = Math.sin(a) * r;
-      
-      dummy.position.set(x, y, z);
-      dummy.rotation.set(0, a + Math.PI / 2, 0);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
+    if (!reduced) {
+      imgs.forEach((src, i) => {
+        const angle = (i / imgs.length) * Math.PI * 2;
+        const a = angle + t * 0.45;
+        const r = 2.5;
+        const x = Math.cos(a) * r;
+        const y = Math.sin(t * 0.6 + angle) * 0.3;
+        const z = Math.sin(a) * r;
+        
+        dummy.position.set(x, y, z);
+        dummy.rotation.set(0, a + Math.PI / 2, 0);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
 
-      const behind = Math.sin(a) > 0.2;
-      setInstanceOpacity(i, behind ? 0.3 : 1);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
+        const behind = Math.sin(a) > 0.2;
+        setInstanceOpacity(i, behind ? 0.3 : 1);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+    }
 
     renderer.render(scene, camera);
   });

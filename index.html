@@ -16,8 +16,9 @@
             <h1><a href="index.html"><img src="dnaLogo.png" alt="Logo da Academia DNA Training"></a></h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
                     <li><a href="produtos.html">Produtos</a></li>
+                    <li><a href="historia.html">História</a></li>
                     <li><a href="contato.html">Contato</a></li>
                 </ul>
             </nav>
@@ -45,18 +46,43 @@
             <p>Oferecemos professores especializados no treinamento para situações de risco e no condicionamento físico completo.</p>
         </section>
 
-        <section class="beneficios">
-            <h3 class="tituloCentralizado">Benefícios</h3>
+        <section class="beneficios" aria-labelledby="tituloBeneficios">
+            <h3 class="tituloCentralizado" id="tituloBeneficios">Benefícios</h3>
+            <div class="gradeBeneficios">
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.7 2.3a1 1 0 0 1 1.4 0l.4.4A7.5 7.5 0 0 1 17 8.6c0 2.2-.9 4.2-2.3 5.9l-1.2 1.6a3 3 0 0 1-2.5 1.1v0a3 3 0 0 1-2.5-1.1L4.4 14.5A11 11 0 0 1 1.6 6.5a9 9 0 0 1-.8-3.4A3 3 0 0 1 4 0.2a9 9 0 0 1 2.7 2.1Z"/><path d="M10 6a3 3 0 0 0-3 3"/><path d="M5 17 4 21l3-1a5 5 0 0 1 4.5.5l2.5 1.5"/><circle cx="17.5" cy="9.5" r="3.5"/></svg>
+                    <h4>Condicionamento Físico</h4>
+                    <p>Cada aula trabalha força, resistência, reflexos e velocidade em movimentos reais de defesa pessoal — o método Bukan do "menor caminho, máxima velocidade e máximo peso".</p>
+                </article>
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 9v11"/><circle cx="8" cy="6.4" r=".9"/><circle cx="12.5" cy="6.4" r=".9"/><circle cx="17" cy="6.4" r=".9"/><path d="M14 14h4v4h-4z"/></svg>
+                    <h4>Espaço Diferenciado</h4>
+                    <p>Sobreloja própria, climatizada e exclusiva para treinos, com tatames e estrutura completa. Horário amplo de funcionamento: das 7h às 22h.</p>
+                </article>
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <h4>Localização</h4>
+                    <p>Na Zona Sul de São Paulo, na Rua Deocleciano Oliveira Filho, 102 (sobreloja) — fácil acesso e transporte por perto.</p>
+                    <a class="beneficio-link" href="https://www.google.com/maps/search/?api=1&query=-23.6650261,-46.7540525" target="_blank" rel="noopener">Como chegar</a>
+                </article>
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <h4>Profissionais Qualificados</h4>
+                    <p>Instrutores certificados pela Bukan School of Krav-Maga, linha oficial fundada por Imi Lichtenfeld, com formação completa em metodologia de defesa pessoal israelense.</p>
+                </article>
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                    <h4>Pontualidade</h4>
+                    <p>Respeito absoluto ao cronograma: as aulas começam e terminam no horário, valorizando a agenda de quem treina conosco.</p>
+                </article>
+                <article class="beneficio-card">
+                    <svg class="beneficio-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2h-5L6 8.5V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8.5Z"/><path d="M9 15l2 2 4-4"/><path d="M5 2h11l3 4v1H7z"/></svg>
+                    <h4>Limpeza</h4>
+                    <p>Ambiente higienizado diariamente e quimono branco sempre limpo, seguindo a tradição Bukan de respeito e disciplina no dojô.</p>
+                </article>
+            </div>
             <div class="conteudoBeneficios">
-                <ul class="listaBeneficios">
-                    <li class="itens">Condicionamento Físico</li>
-                    <li class="itens">Espaço Diferenciado</li>
-                    <li class="itens">Localização</li>
-                    <li class="itens">Profissionais Qualificados</li>
-                    <li class="itens">Pontualidade</li>
-                    <li class="itens">Limpeza</li>
-                </ul>
-                <div id="carrossel-canvas" class="carrossel-canvas" title="Carrossel 3D de imagens DNA">
+                <div id="carrossel-canvas" class="carrossel-canvas" title="Carrossel 3D de imagens DNA" role="img" aria-label="Carrossel 3D com fotos da academia">
                     <noscript>
                         <img src="dna.jpg" class="imagemBeneficios" alt="Equipamentos e estrutura da academia">
                     </noscript>
@@ -74,7 +100,7 @@
 
         <section class="video">
             <h3 class="tituloCentralizado">Conheça a DNA Training</h3>
-            <iframe width="100%" height="315" src="https://www.youtube.com/embed/9gp3FMUvTzw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Vídeo de divulgação da Academy DNA"></iframe>
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/9gp3FMUvTzw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen title="Vídeo de divulgação da Academy DNA"></iframe>
         </section>
     </main>
 

@@ -11,7 +11,7 @@ Site da **Academia DNA Training** (Krav-Maga Bukan, Zona Sul de São Paulo) tota
 | | URL |
 |---|---|
 | **Site (GitHub Pages)** | https://majinmagros.github.io/dna-2026/ |
-| **Páginas iniciais** | [`index.html`](index.html) · [`produtos.html`](produtos.html) · [`contato.html`](contato.html) |
+| **Páginas iniciais** | [`index.html`](index.html) · [`produtos.html`](produtos.html) · [`historia.html`](historia.html) · [`contato.html`](contato.html) |
 
 ---
 
@@ -19,6 +19,8 @@ Site da **Academia DNA Training** (Krav-Maga Bukan, Zona Sul de São Paulo) tota
 
 - **Hélice de DNA 3D** (página inicial): a dupla hélice gira em looping infinito com as fotos do repositório "grudadas" nas estruturas, anéis de luz pulsando e estrelas ao fundo. **OrbitControls** (arrastar para orbitar, scroll para zoom, câmera gira sozinha).
 - **Carrossel 3D**: imagens orbitando com fade dinâmico (seção Benefícios e página Produtos).
+- **Timeline 3D do Krav-Maga** (página História): 4 anéis de partículas girando (vermelho/ciano/azul) + marcos flutuantes (1910 → 1998) com fading, estrelas e fog, no estilo threejs.org.
+- **6 cards de benefícios** (página inicial): ícones SVG + título + descrição cruzados com os dados reais do site kravmaga-bukan.com/pt (inclui link "Como chegar" para o Google Maps).
 - **Cubo texturizado** com as 6 imagens da academia (página Produtos).
 - **Partículas DNA** em dupla hélice com sprites dos logos flutuando (página Contato).
 - **Theme dark** com variáveis CSS, acentos em vermelho/ciano e layout 100% responsivo (mobile-first).
@@ -40,9 +42,10 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 
 ```
 .
-├── index.html            # Home: hero héliceDNA 3D + carrossel benefícios + mapa + vídeo
+├── index.html            # Home: hero héliceDNA 3D + 6 cards de benefícios + carrossel + mapa + vídeo
 ├── produtos.html         # Galeria 3D de modalidades + cubo texturizado
-├── contato.html          # Formulário + tabela de horários + fundo de partículas DNA
+├── historia.html         # História do Krav-Maga: timeline 3D + linha do tempo (1910-1998) + Bukan
+├── contato.html          # Formulário + horários + informações reais (endereço/telefone Bukan) + partículas DNA
 ├── style.css             # CSS unificado (dark theme, variáveis, responsivo)
 ├── reset.css             # Reset CSS (Meyer)
 ├── dnaLogo.png           # Logomarca (160×160)
@@ -52,9 +55,10 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 ├── imagem1.jpg           # Foto panorâmica (banner/carrossel)
 ├── dnalogo.jpeg · dnalogo1.jpeg  # Variantes do logo (sprites 3D)
 └── js/
-    ├── core.js           # Utilitários compartilhados (renderer, resize, texturas, estrelas)
+    ├── core.js           # Utilitários compartilhados (renderer, resize, texturas, estrelas, reduced-motion)
     ├── hero.js           # Animação da página inicial (hélice + carrossel)
     ├── galeria.js        # Animação da página de produtos (anel + cubo)
+    ├── historia.js       # Timeline 3D da página história (anéis de partículas + marcos)
     ├── contato.js        # Partículas DNA + sprites (página contato)
     └── build/            # three.js r160 vendored
         ├── three.module.js
@@ -72,7 +76,11 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 - Nome de arquivo de entrada corrigido: `Academia DNA.html` (com espaço) → `index.html`.
 - `meta viewport` corrigido (`width=device-width, initial-scale=1.0`).
 - Tags fechadas e HTML semântico (antes havia `<tr>` e `<em>` não fechados).
-- `alt`/`title` em todas as imagens e canvas acessíveis.
+- `alt`/`title` em todas as imagens e canvas acessíveis; `aria-labelledby`/`role` nos cards e carrosséis.
+- `prefers-reduced-motion`: todas as animações 3D (hélice, carrossel, timeline, partículas) viram cena estática quando o usuário pede menos movimento.
+- Pausa automática das animações quando a aba fica oculta (`visibilitychange`) e quando o canvas sai da viewport (`IntersectionObserver`, `loopWhenVisible`).
+- `failIfMajorPerformanceCaveat: false` + DPR limitado a 2 (desempenho em máquinas fracas).
+- `loading="lazy"` em iframes (mapa/vídeo); `noscript` com fallback estático em todas as cenas 3D.
 - CSS consolidado (antes 3 folhas conflitantes) com variáveis e tema responsivo.
 - Removidos arquivos desnecessários (`get-pip.py`, CSS duplicados, `Academia DNA.html`).
 - Typos corrigidos (Pontualidade, Proporcionar, formulário, pretende).

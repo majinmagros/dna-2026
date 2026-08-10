@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh } from './core.js';
+import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, loadTexture, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* GALERIA 3D: imagens em anel orbitante (interativo) — InstancedMesh  */
@@ -34,27 +34,30 @@ async function galeria() {
   scene.add(mesh);
 
   const clock = new THREE.Clock();
+  const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
 
-    imgs.forEach((src, i) => {
-      const angle = (i / imgs.length) * Math.PI * 2;
-      const a = angle + t * 0.4; // group.rotation.y is now handled per-instance
-      const r = 2.8;
-      const x = Math.cos(a) * r;
-      const y = Math.sin(t * 0.4 + angle) * 0.4;
-      const z = Math.sin(a) * r;
-      
-      dummy.position.set(x, y, z);
-      dummy.rotation.set(0, a + Math.PI / 2, 0);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
+    if (!reduced) {
+      imgs.forEach((src, i) => {
+        const angle = (i / imgs.length) * Math.PI * 2;
+        const a = angle + t * 0.4; // group.rotation.y is now handled per-instance
+        const r = 2.8;
+        const x = Math.cos(a) * r;
+        const y = Math.sin(t * 0.4 + angle) * 0.4;
+        const z = Math.sin(a) * r;
+        
+        dummy.position.set(x, y, z);
+        dummy.rotation.set(0, a + Math.PI / 2, 0);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
 
-      const opacity = Math.abs(Math.sin(a)) > 0.6 ? 0.3 : 1;
-      setInstanceOpacity(i, opacity);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
+        const opacity = Math.abs(Math.sin(a)) > 0.6 ? 0.3 : 1;
+        setInstanceOpacity(i, opacity);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+    }
 
     controls.update();
     renderer.render(scene, camera);
@@ -110,8 +113,10 @@ function beneficiosMini() {
   const clock = new THREE.Clock();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(clock.getDelta(), 0.05);
-    cube.rotation.x += dt * 0.25;
-    cube.rotation.y += dt * 0.4;
+    if (!prefersReducedMotion()) {
+      cube.rotation.x += dt * 0.25;
+      cube.rotation.y += dt * 0.4;
+    }
     renderer.render(scene, camera);
   });
 

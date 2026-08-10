@@ -610,3 +610,261 @@ footer img {
         padding: 1.4em 1.2em 1em;
     }
 }
+
+/* ===== Benefícios em cards ===== */
+.gradeBeneficios {
+    max-width: 1100px;
+    margin: 0 auto 3em;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+.beneficio-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.beneficio-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--red);
+    box-shadow: var(--shadow);
+}
+
+.beneficio-icone {
+    width: 42px;
+    height: 42px;
+    color: var(--cyan);
+    margin-bottom: 4px;
+}
+
+.beneficio-card h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.beneficio-card p {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+}
+
+.beneficio-link {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-block;
+    padding: 8px 18px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.beneficio-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 22px rgba(225, 29, 60, 0.4);
+}
+
+/* ===== Página História ===== */
+.tituloSub {
+    text-align: center;
+    color: var(--text-dim);
+    margin-top: 8px;
+    font-size: 1.05rem;
+}
+
+main.historia .hero {
+    height: 55vh;
+    min-height: 380px;
+}
+
+.timeline {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 3.5em;
+    position: relative;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, var(--red), var(--cyan));
+    opacity: 0.55;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    gap: 28px;
+    padding: 18px 0;
+    align-items: flex-start;
+}
+
+.timeline-item:nth-child(odd) {
+    flex-direction: row;
+}
+
+.timeline-item:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.timeline-ano {
+    position: absolute;
+    left: 50%;
+    top: 26px;
+    transform: translateX(-50%);
+    min-width: 74px;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #0b0e14;
+    background: linear-gradient(135deg, var(--red), var(--cyan));
+    border-radius: 999px;
+    z-index: 2;
+    box-shadow: 0 0 18px rgba(0, 229, 255, 0.4);
+}
+
+.timeline-conteudo {
+    width: calc(50% - 56px);
+    margin-left: calc(50% + 28px);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.timeline-item:nth-child(even) .timeline-conteudo {
+    margin-left: 0;
+    margin-right: calc(50% + 28px);
+}
+
+.timeline-conteudo:hover {
+    border-color: var(--cyan);
+    transform: translateY(-3px);
+}
+
+.timeline-conteudo h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.timeline-conteudo h4::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 10px rgba(225, 29, 60, 0.7);
+}
+
+.timeline-conteudo p {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 1.65;
+}
+
+/* ===== Contato: informações reais ===== */
+.infoContato {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 24px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.infoContato-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+}
+
+.infoContato-item h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+.infoContato-item p {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+}
+
+.infoContato-item a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.infoContato-item a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Responsivo: benefícios / timeline / contato ===== */
+@media screen and (max-width: 760px) {
+    .gradeBeneficios {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline::before {
+        left: 18px;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(even) {
+        flex-direction: column;
+        padding-left: 48px;
+        gap: 10px;
+    }
+
+    .timeline-ano {
+        left: 18px;
+        top: 22px;
+        transform: translateX(-50%);
+        min-width: 36px;
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+
+    .timeline-conteudo,
+    .timeline-item:nth-child(even) .timeline-conteudo {
+        width: 100%;
+        margin: 0;
+    }
+
+    .infoContato {
+        grid-template-columns: 1fr;
+    }
+}
