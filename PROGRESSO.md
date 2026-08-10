@@ -84,7 +84,14 @@ inspiração threejs.org.
       fotos distribuídas em `(i*2π)/9` ao redor da hélice, face externa (`rotation.y = π/2 - a`),
       raio alternado (+0.12 nos ímpares), guard `d.phase === undefined` (pula ringA/ringB) e
       branch estático para `prefersReducedMotion` — `js/hero.js`
-- [x] Push de TODOS os commits para `origin/main` (aprovado pelo usuário) — ver `git log`
+- [x] Push de TODOS os commits para `origin/main` (aprovado pelo usuário) — `main` sincronizada:
+      `ebf245f` (fix fotos + remoção imagem1) e `6d1428b` (feature v2) publicados, autor `majinmagros`
+      (identidade local do repo configurada; commits reescritos via filter-branch; autenticação
+      concluída via Git Credential Manager no push manual do usuário)
+- [x] Auditoria de skills (external): 1272 SKILL.md, todos com frontmatter OK; refs ausentes eram
+      falsos positivos (exemplos de prosa, duplicatas `.agents/.claude/.cursor/.kiro/docs` e scripts
+      no raiz do pacote); causa do erro do loader: PATH sem `C:\Windows\System32\WindowsPowerShell\v1.0`
+      → adicionado ao PATH do usuário (fix-path.ps1 → tamanho 764)
 
 ## Trabalho pendente
 
