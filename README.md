@@ -46,6 +46,9 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 ├── produtos.html         # Galeria 3D de modalidades + cubo texturizado
 ├── historia.html         # História do Krav-Maga: timeline 3D + linha do tempo (1910-1998) + Bukan
 ├── contato.html          # Formulário + horários + informações reais (endereço/telefone Bukan) + partículas DNA
+├── 404.html              # Página 404 customizada (GitHub Pages)
+├── robots.txt            # Permite rastreamento + aponta o sitemap
+├── sitemap.xml           # Sitemap com as 4 páginas públicas
 ├── style.css             # CSS unificado (dark theme, variáveis, responsivo)
 ├── reset.css             # Reset CSS (Meyer)
 ├── dnaLogo.png           # Logomarca (160×160)
@@ -78,6 +81,8 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 - Tags fechadas e HTML semântico (antes havia `<tr>` e `<em>` não fechados).
 - `alt`/`title` em todas as imagens e canvas acessíveis; `aria-labelledby`/`role` nos cards e carrosséis.
 - `prefers-reduced-motion`: todas as animações 3D (hélice, carrossel, timeline, partículas) viram cena estática quando o usuário pede menos movimento.
+- Acessibilidade WCAG 2.2: skip-link "Pular para o conteúdo", `:focus-visible` com anel cyan, hit areas ≥ 40px nos radios/checkbox, contraste ≥ 4.5:1 nos textos de UI.
+- SEO: meta description, Open Graph e canonical em todas as páginas; JSON-LD `HealthClub` no index; `robots.txt` + `sitemap.xml`.
 - Pausa automática das animações quando a aba fica oculta (`visibilitychange`) e quando o canvas sai da viewport (`IntersectionObserver`, `loopWhenVisible`).
 - `failIfMajorPerformanceCaveat: false` + DPR limitado a 2 (desempenho em máquinas fracas).
 - `loading="lazy"` em iframes (mapa/vídeo); `noscript` com fallback estático em todas as cenas 3D.

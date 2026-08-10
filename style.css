@@ -19,6 +19,8 @@
 
 html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -28,9 +30,41 @@ body {
     line-height: 1.6;
 }
 
+h1,
+h2,
+h3,
+h4 {
+    text-wrap: balance;
+}
+
 img {
     max-width: 100%;
     display: block;
+}
+
+/* ===== Acessibilidade: skip-link e foco visível ===== */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    padding: 12px 20px;
+    background: var(--cyan);
+    color: #0b0e14;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 0 0 8px 0;
+    text-decoration: none;
+}
+
+.skip-link:focus-visible {
+    left: 0;
+}
+
+:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
 }
 
 /* ===== Header / Nav ===== */
@@ -400,6 +434,7 @@ section {
     font-weight: 700;
     color: var(--cyan);
     margin-top: 10px;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ===== Formulário / Tabela (contato) ===== */
@@ -456,7 +491,29 @@ form label.checkbox {
     align-items: center;
     gap: 8px;
     margin: 12px 0;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
     cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+form label[for^="radio"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    margin: 6px 8px 6px 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+form label[for^="radio"]:hover,
+form label.checkbox:hover {
+    border-color: var(--cyan);
+    background: var(--panel-hover);
 }
 
 .inputPadrao {
@@ -548,6 +605,7 @@ th {
     border-bottom: 1px solid var(--border);
     padding: 14px 18px;
     text-align: left;
+    font-variant-numeric: tabular-nums;
 }
 
 tbody tr:hover {
@@ -737,8 +795,8 @@ main.historia .hero {
     text-align: center;
     font-weight: 700;
     font-size: 0.95rem;
-    color: #0b0e14;
-    background: linear-gradient(135deg, var(--red), var(--cyan));
+    color: #fff;
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
     border-radius: 999px;
     z-index: 2;
     box-shadow: 0 0 18px rgba(0, 229, 255, 0.4);

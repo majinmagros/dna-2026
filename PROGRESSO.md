@@ -95,9 +95,10 @@ inspiração threejs.org.
 
 ## Trabalho pendente
 
-- Nada. Feature v2 completa + retomada encerrada. Próximos passos (só se o usuário pedir):
-  revisão visual no navegador (WebGL), `prefers-reduced-motion` real no Windows (configurações),
-  testes em mobile.
+- Formulário da página contato usa `action="#"` — sem destino real de envio. Para ir ao ar de verdade,
+  sugerir serviço externo (ex.: FormSubmit/Formspree) — requer decisão do usuário.
+- Revisão visual no navegador (WebGL) das novas regras de foco/`skip-link`/chips de radio.
+- NÃO commitado NADA desta sessão ainda (mudanças no working tree) — commit/push só com pedido.
 
 ## Boas práticas aplicadas (referência)
 
@@ -114,7 +115,14 @@ python -m http.server 8123   # ou: npx serve
 
 ---
 
-*Atualizado em: 10/08/2026 — sessão opencode (deepseek-v4-flash-free): auditoria de skills concluída
-(sem skills quebradas; o erro do loader era PATH sem `C:\Windows\System32\WindowsPowerShell\v1.0`,
-adicionado ao PATH do usuário), remoção da imagem1.jpg, fix das fotos do hero, push para GitHub.
+*Atualizado em: 10/08/2026 — sessão opencode (deepseek-v4-flash-free): auditoria com skills
+(accessibility · production-audit · seo · make-interfaces-feel-better) + melhorias aplicadas:
+skip-link e `main id="conteudo"` nas 4 páginas + 404.html; `:focus-visible` global (cyan);
+contraste do chip `.timeline-ano` corrigido (texto branco sobre red→red-dark, ≥4.71:1);
+hit area dos radios/checkbox (padding 10px 14px, chips com hover); `th scope="col"` na tabela;
+titles padronizados `X | DNA Training` + meta descriptions + Open Graph + canonical nas 4 páginas;
+JSON-LD `HealthClub` no index (endereço/tel/geo/horários reais); `robots.txt` + `sitemap.xml`;
+polish CSS: font-smoothing, `text-wrap: balance` em headings, `tabular-nums` em preços/tabela;
+typos corrigidos ("Academy DNA" → "Academia DNA", "torne as modalidades" → "conheça").*
+Verificação: JS OK via `node --check` (.mjs), todas as 11 URLs responderam 200 no servidor local.
 Continuar SEMPRE lendo este arquivo.*

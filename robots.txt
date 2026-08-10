@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://majinmagros.github.io/dna-2026/sitemap.xml
