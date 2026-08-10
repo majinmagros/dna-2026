@@ -52,7 +52,7 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 ├── dna1..dna6.jpeg       # Fotos da academia
 ├── dna.jpg               # Foto — benefícios / carrossel
 ├── DNA kids.jpg          # Foto — plano Kids
-├── imagem1.jpg           # Foto panorâmica (banner/carrossel)
+
 ├── dnalogo.jpeg · dnalogo1.jpeg  # Variantes do logo (sprites 3D)
 └── js/
     ├── core.js           # Utilitários compartilhados (renderer, resize, texturas, estrelas, reduced-motion)

@@ -75,10 +75,21 @@ inspiração threejs.org.
 - [x] Verificação — `node --check` nos 5 JS; todas as páginas/assets respondem 200 no servidor local
 - [x] Commit único em `main` (estilo do repo: "feat: ...")
 
+## Trabalho concluído (retomada — commit pendente ANTES do push)
+
+- [x] Remoção de `imagem1.jpg` a pedido do usuário (foto "Covid" — sessão de retomada):
+      arquivo apagado; hero.js (fotos 10 → 9, carrossel 6 → 5), galeria.js (cubo usa `dna1.jpeg`
+      no lugar), README.md sem a linha; `node --check` OK nos 2 JS
+- [x] Fix das fotos da hélice (bug: só a última foto aparecia — slots sem posição X/Z):
+      fotos distribuídas em `(i*2π)/9` ao redor da hélice, face externa (`rotation.y = π/2 - a`),
+      raio alternado (+0.12 nos ímpares), guard `d.phase === undefined` (pula ringA/ringB) e
+      branch estático para `prefersReducedMotion` — `js/hero.js`
+- [x] Push de TODOS os commits para `origin/main` (aprovado pelo usuário) — ver `git log`
+
 ## Trabalho pendente
 
-- Nada. Feature v2 completa. Próximos passos (só se o usuário pedir): push para `origin/main`,
-  revisão visual no navegador (WebGL), `prefers-reduced-motion` real no Windows (configurações) ,
+- Nada. Feature v2 completa + retomada encerrada. Próximos passos (só se o usuário pedir):
+  revisão visual no navegador (WebGL), `prefers-reduced-motion` real no Windows (configurações),
   testes em mobile.
 
 ## Boas práticas aplicadas (referência)
@@ -96,5 +107,7 @@ python -m http.server 8123   # ou: npx serve
 
 ---
 
-*Atualizado em: 09/08/2026 — sessão abercode (deepseek-v4-flash-free) retomada após travamento.
+*Atualizado em: 10/08/2026 — sessão opencode (deepseek-v4-flash-free): auditoria de skills concluída
+(sem skills quebradas; o erro do loader era PATH sem `C:\Windows\System32\WindowsPowerShell\v1.0`,
+adicionado ao PATH do usuário), remoção da imagem1.jpg, fix das fotos do hero, push para GitHub.
 Continuar SEMPRE lendo este arquivo.*

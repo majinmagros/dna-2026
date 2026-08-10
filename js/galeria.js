@@ -103,7 +103,7 @@ function beneficiosMini() {
   );
   scene.add(cube);
 
-  ['dnaLogo.png', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'dna.jpg', 'imagem1.jpg'].forEach((src, i) => {
+  ['dnaLogo.png', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'dna.jpg', 'dna1.jpeg'].forEach((src, i) => {
     loadTexture(src).then((tex) => {
       cube.material[i] = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
       cube.material[i].needsUpdate = true;

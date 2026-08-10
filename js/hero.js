@@ -56,7 +56,7 @@ function initHero() {
   /* --- fotos "grudadas" na hélice, duas por volta --- */
   const photos = [
     'dnaLogo.png', 'dna1.jpeg', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg',
-    'dna5.jpeg', 'dna6.jpeg', 'dna.jpg', 'DNA kids.jpg', 'imagem1.jpg'
+    'dna5.jpeg', 'dna6.jpeg', 'dna.jpg', 'DNA kids.jpg'
   ];
 
   const helix = new THREE.Group();
@@ -108,14 +108,30 @@ function initHero() {
       helix.rotation.y += dt * 0.3;
       helix.children.forEach((rung, i) => {
         const d = rung.userData;
-        rung.position.y = d.offY + Math.sin(t * d.spin + i) * 0.5;
-        const r = 0.06;
-        rung.rotation.x = Math.sin(t * 0.4 + i) * r;
-        rung.rotation.z = Math.cos(t * 0.4 + i) * r;
+        if (d.phase === undefined) return;
+        const a = (i * Math.PI * 2) / 9 + t * 0.35;
+        rung.position.set(
+          Math.cos(a) * (radius + (i % 2 ? 0.12 : 0)),
+          d.offY + Math.sin(t * d.spin + i) * 0.5,
+          Math.sin(a) * (radius + (i % 2 ? 0.12 : 0))
+        );
+        rung.rotation.set(Math.sin(t * 0.4 + i) * 0.06, Math.PI / 2 - a, Math.cos(t * 0.4 + i) * 0.06);
       });
 
       ringA.rotation.x += dt * 0.12;
       ringB.rotation.y -= dt * 0.15;
+    } else {
+      helix.children.forEach((rung, i) => {
+        const d = rung.userData;
+        if (d.phase === undefined) return;
+        const a = (i * Math.PI * 2) / 9;
+        rung.position.set(
+          Math.cos(a) * (radius + (i % 2 ? 0.12 : 0)),
+          d.offY,
+          Math.sin(a) * (radius + (i % 2 ? 0.12 : 0))
+        );
+        rung.rotation.set(0, Math.PI / 2 - a, 0);
+      });
     }
 
     controls.update();
@@ -150,7 +166,7 @@ async function carrossel() {
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0.8, 6);
 
-  const imgs = ['dna.jpg', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'DNA kids.jpg', 'imagem1.jpg'];
+  const imgs = ['dna.jpg', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'DNA kids.jpg'];
 
   // Create texture atlas and instanced mesh
   const { texture: atlasTexture, uvRects } = await createTextureAtlas(imgs);
