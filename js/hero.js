@@ -5,10 +5,10 @@ import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, di
 /* ------------------------------------------------------------------ */
 /* HERO: dupla hélice de DNA feita de fotos do repositório (loop)      */
 /* ------------------------------------------------------------------ */
-function initHero() {
+async function initHero() {
   const mount = document.getElementById('hero-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = await createRenderer(mount);
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(60, mount.clientWidth / mount.clientHeight, 0.1, 200);
@@ -97,12 +97,13 @@ function initHero() {
   helix.add(ringA);
   helix.add(ringB);
 
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
+  timer.start();
   const reduced = prefersReducedMotion();
 
   const renderFrame = () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const t = clock.elapsedTime;
+    const dt = Math.min(timer.getDelta(), 0.05);
+    const t = timer.elapsedTime;
 
     if (!reduced) {
       helix.rotation.y += dt * 0.3;
@@ -172,17 +173,18 @@ async function carrossel() {
   const { texture: atlasTexture, uvRects } = await createTextureAtlas(imgs);
   if (!atlasTexture) return;
 
-  const { mesh, dummy, updateInstanceMatrix, setInstanceOpacity } = createCarouselInstancedMesh(uvRects, imgs.length);
-  mesh.material.uniforms.uAtlas.value = atlasTexture;
+  const { mesh, dummy, updateInstanceMatrix, setInstanceOpacity, setAtlas } = createCarouselInstancedMesh(uvRects, imgs.length);
+  setAtlas(atlasTexture);
   scene.add(mesh);
 
   addStars(scene, 300, 16);
 
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
+  timer.start();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const t = clock.elapsedTime;
+    const dt = Math.min(timer.getDelta(), 0.05);
+    const t = timer.elapsedTime;
 
     if (!reduced) {
       imgs.forEach((src, i) => {

@@ -8,7 +8,7 @@ import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, l
 async function galeria() {
   const mount = document.getElementById('galeria-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = await createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 1.2, 7);
@@ -29,15 +29,16 @@ async function galeria() {
   const { texture: atlasTexture, uvRects } = await createTextureAtlas(imgs);
   if (!atlasTexture) return;
 
-  const { mesh, dummy, setInstanceOpacity } = createCarouselInstancedMesh(uvRects, imgs.length, 1.5, 1.5);
-  mesh.material.uniforms.uAtlas.value = atlasTexture;
+  const { mesh, dummy, setInstanceOpacity, setAtlas } = createCarouselInstancedMesh(uvRects, imgs.length, 1.5, 1.5);
+  setAtlas(atlasTexture);
   scene.add(mesh);
 
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
+  timer.start();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const t = clock.elapsedTime;
+    const dt = Math.min(timer.getDelta(), 0.05);
+    const t = timer.elapsedTime;
 
     if (!reduced) {
       imgs.forEach((src, i) => {
@@ -85,54 +86,56 @@ async function galeria() {
 function beneficiosMini() {
   const mount = document.getElementById('galeriaBeneficios-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 4.5);
+  createRenderer(mount).then(({ renderer, cleanup: cleanupRenderer }) => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 4.5);
 
-  const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(2.4, 2.4, 2.4),
-    [
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-      new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
-    ]
-  );
-  scene.add(cube);
+    const cube = new THREE.Mesh(
+      new THREE.BoxGeometry(2.4, 2.4, 2.4),
+      [
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+        new THREE.MeshBasicMaterial({ color: 0x1a2130, transparent: true, depthWrite: false }),
+      ]
+    );
+    scene.add(cube);
 
-  ['dnaLogo.png', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'dna.jpg', 'dna1.jpeg'].forEach((src, i) => {
-    loadTexture(src).then((tex) => {
-      cube.material[i] = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
-      cube.material[i].needsUpdate = true;
-    }).catch(() => {});
+    ['dnaLogo.png', 'dna2.jpeg', 'dna3.jpeg', 'dna4.jpeg', 'dna.jpg', 'dna1.jpeg'].forEach((src, i) => {
+      loadTexture(src).then((tex) => {
+        cube.material[i] = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
+        cube.material[i].needsUpdate = true;
+      }).catch(() => {});
+    });
+
+    const timer = new THREE.Timer();
+    timer.start();
+    const stopLoop = loopWhenVisible(mount, () => {
+      const dt = Math.min(timer.getDelta(), 0.05);
+      if (!prefersReducedMotion()) {
+        cube.rotation.x += dt * 0.25;
+        cube.rotation.y += dt * 0.4;
+      }
+      renderer.render(scene, camera);
+    });
+
+    const stopResize = watchResize(renderer, camera, mount);
+
+    // Cleanup on mount removal
+    const observer = new MutationObserver(() => {
+      if (!document.body.contains(mount)) {
+        stopLoop();
+        stopResize();
+        cleanupRenderer();
+        disposeScene(scene);
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   });
-
-  const clock = new THREE.Clock();
-  const stopLoop = loopWhenVisible(mount, () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    if (!prefersReducedMotion()) {
-      cube.rotation.x += dt * 0.25;
-      cube.rotation.y += dt * 0.4;
-    }
-    renderer.render(scene, camera);
-  });
-
-  const stopResize = watchResize(renderer, camera, mount);
-
-  // Cleanup on mount removal
-  const observer = new MutationObserver(() => {
-    if (!document.body.contains(mount)) {
-      stopLoop();
-      stopResize();
-      cleanupRenderer();
-      disposeScene(scene);
-      observer.disconnect();
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 function start() {

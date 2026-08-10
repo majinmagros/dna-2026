@@ -1,4 +1,4 @@
-# PROGRESSO · DNA Training v2 — 09/08/2026
+# PROGRESSO · DNA Training v2 — 10/08/2026
 
 > Este arquivo preserva o contexto da sessão caso a conexão caia. Qualquer agente deve ler
 > este arquivo ANTES de continuar o trabalho e atualizá-lo ao final.
@@ -8,7 +8,8 @@
 - **Repo:** `C:\Projetos\dna-2026` (clonado de https://github.com/majinmagros/dna-2026.git — o pedido era C:\Users\Projetos, mas exigia admin; usuário aprovou C:\Projetos)
 - **Branch:** `main` (sincronizada com `origin/main` no início)
 - **Último commit:** `0510c81` (InstancedMesh + texture atlas + loopWhenVisible + cleanup). O trabalho do v2 (cards benefícios + página História + timeline 3D + contato real + boas práticas) já está commitado. NÃO push sem pedir.
-- Site: estático (HTML/CSS/JS + Three.js r160 vendored em `js/build/`), dark theme (vermelho #e11d3c / ciano #00e5ff), Montserrat, mobile-first
+- **Working tree atual:** Upgrade Three.js **r160 → r185** + WebGPU + NodeMaterial/TSL + THREE.Timer (mudanças não commitadas)
+- Site: estático (HTML/CSS/JS + Three.js r185 vendored em `js/build/`), dark theme (vermelho #e11d3c / ciano #00e5ff), Montserrat, mobile-first
 
 ## Contexto do pedido (original)
 
@@ -99,6 +100,41 @@ inspiração threejs.org.
   sugerir serviço externo (ex.: FormSubmit/Formspree) — requer decisão do usuário.
 - Revisão visual no navegador (WebGL) das novas regras de foco/`skip-link`/chips de radio.
 - NÃO commitado NADA desta sessão ainda (mudanças no working tree) — commit/push só com pedido.
+
+## Sessão atual (10/08/2026) — Upgrade Three.js r160 → r185 + WebGPU + TSL + Timer
+
+### ✅ Concluído (working tree — não commitado):
+
+- [x] **Three.js r185 baixado e substituído** em `js/build/three.module.js` (650KB)
+- [x] **OrbitControls.js r185** já estava atualizado (rewrite completo)
+- [x] **three.webgpu.min.js** presente em `js/build/`
+- [x] **createRenderer → async + WebGPURenderer fallback** (`js/core.js`):
+  - Tenta `THREE.WebGPURenderer` + `await r.init()` se `navigator.gpu` disponível
+  - Fallback gracioso para `THREE.WebGLRenderer` com `failIfMajorPerformanceCaveat: false`
+  - Retorna `{ renderer, api, cleanup }` onde `api` = `'webgpu' | 'webgl'`
+- [x] **createCarouselInstancedMesh → NodeMaterial/TSL** (`js/core.js`):
+  - `MeshBasicNodeMaterial` com `colorNode` + `opacityNode` via TSL
+  - `tsl.texture().sample(uv.mul(scale).add(offset))` para atlas
+  - Nova API `setAtlas(texture)` substitui `material.uniforms.uAtlas.value`
+  - Compatível com **WebGL e WebGPU** (sem `onBeforeCompile`)
+- [x] **Migração `THREE.Clock → THREE.Timer`** (6 ocorrências em 4 arquivos):
+  - `js/historia.js` (1x)
+  - `js/galeria.js` (2x — galeria principal + beneficiosMini)
+  - `js/hero.js` (2x — initHero + carrossel)
+  - `js/contato.js` (1x)
+  - Padrão: `const timer = new THREE.Timer(); timer.start(); timer.getDelta(); timer.elapsedTime`
+- [x] **Atualização consumers** (`js/galeria.js`, `js/hero.js`):
+  - `await createRenderer(mount)` + `setAtlas(atlasTexture)` em vez de `uniforms.uAtlas.value`
+  - `beneficiosMini()` refatorado para usar promise `.then()` (createRenderer agora async)
+- [x] **README.md atualizado**: r185, WebGPU, NodeMaterial/TSL, THREE.Timer, estrutura build/
+- [x] **PROGRESSO.md atualizado** (este arquivo)
+
+### ⏳ Pendente (validação + commit):
+
+- [ ] Testar servidor local (`python -m http.server` ou `npx serve`) — todas as 5 páginas 200 OK
+- [ ] `node --check` — não funciona direto (ES modules), validar via browser console
+- [ ] Commit único: "feat: Three.js r185 + WebGPU + NodeMaterial/TSL + Timer API"
+- [ ] Push para `origin/main` (após aprovação do usuário)
 
 ## Boas práticas aplicadas (referência)
 

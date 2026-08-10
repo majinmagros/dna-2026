@@ -75,11 +75,12 @@ function particulas() {
       sprites.push(s);
     }).catch(() => {});
   });
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+  timer.start();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const t = clock.elapsedTime;
+    const dt = Math.min(timer.getDelta(), 0.05);
+    const t = timer.elapsedTime;
 
     if (!reduced) {
       points.rotation.y += dt * 0.25;

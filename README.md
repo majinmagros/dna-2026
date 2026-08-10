@@ -18,13 +18,15 @@ Site da **Academia DNA Training** (Krav-Maga Bukan, Zona Sul de São Paulo) tota
 ## ✨ Destaques
 
 - **Hélice de DNA 3D** (página inicial): a dupla hélice gira em looping infinito com as fotos do repositório "grudadas" nas estruturas, anéis de luz pulsando e estrelas ao fundo. **OrbitControls** (arrastar para orbitar, scroll para zoom, câmera gira sozinha).
-- **Carrossel 3D**: imagens orbitando com fade dinâmico (seção Benefícios e página Produtos).
+- **Carrossel 3D (NodeMaterial + TSL)**: imagens orbitando com fade dinâmico via **NodeMaterial/TSL** (Three.js r185) — funciona em **WebGL e WebGPU** sem shaders customizados.
 - **Timeline 3D do Krav-Maga** (página História): 4 anéis de partículas girando (vermelho/ciano/azul) + marcos flutuantes (1910 → 1998) com fading, estrelas e fog, no estilo threejs.org.
 - **6 cards de benefícios** (página inicial): ícones SVG + título + descrição cruzados com os dados reais do site kravmaga-bukan.com/pt (inclui link "Como chegar" para o Google Maps).
 - **Cubo texturizado** com as 6 imagens da academia (página Produtos).
 - **Partículas DNA** em dupla hélice com sprites dos logos flutuando (página Contato).
 - **Theme dark** com variáveis CSS, acentos em vermelho/ciano e layout 100% responsivo (mobile-first).
-- **Sem dependência de CDN**: three.js r160 vendored localmente em `js/build/`.
+- **WebGPU + WebGL fallback**: `createRenderer` tenta `THREE.WebGPURenderer` primeiro e cai para `WebGLRenderer` se indisponível.
+- **Timer API**: migração de `THREE.Clock` → `THREE.Timer` em todos os loops de animação.
+- **Sem dependência de CDN**: three.js **r185** vendored localmente em `js/build/`.
 
 ## 🚀 Como rodar
 
@@ -58,19 +60,20 @@ Ou abra a versão publicada no GitHub Pages: https://majinmagros.github.io/dna-2
 
 ├── dnalogo.jpeg · dnalogo1.jpeg  # Variantes do logo (sprites 3D)
 └── js/
-    ├── core.js           # Utilitários compartilhados (renderer, resize, texturas, estrelas, reduced-motion)
+    ├── core.js           # Utilitários compartilhados (renderer WebGPU+WebGL, resize, texturas, estrelas, NodeMaterial/TSL, reduced-motion, THREE.Timer)
     ├── hero.js           # Animação da página inicial (hélice + carrossel)
     ├── galeria.js        # Animação da página de produtos (anel + cubo)
     ├── historia.js       # Timeline 3D da página história (anéis de partículas + marcos)
     ├── contato.js        # Partículas DNA + sprites (página contato)
-    └── build/            # three.js r160 vendored
+    └── build/            # three.js r185 vendored
         ├── three.module.js
-        └── OrbitControls.js
+        ├── OrbitControls.js
+        └── three.webgpu.min.js
 ```
 
 ## 🛠 Referências / bibliotecas
 
-- **Three.js r160** — <https://threejs.org/> (documentação oficial usada: `TextureLoader`, `MeshBasicMaterial`, `OrbitControls`, loops com `requestAnimationFrame`).
+- **Three.js r185** — <https://threejs.org/> (NodeMaterial/TSL, WebGPURenderer, THREE.Timer, TextureLoader, MeshBasicNodeMaterial, OrbitControls).
 - Fonte **Montserrat** — Google Fonts.
 - Mapas — Google Maps Embed; vídeo — YouTube Embed.
 

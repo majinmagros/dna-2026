@@ -97,12 +97,13 @@ function timeline() {
     return sprite;
   });
 
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
+  timer.start();
   const reduced = prefersReducedMotion();
 
   const stopLoop = loopWhenVisible(mount, () => {
-    const dt = Math.min(clock.getDelta(), 0.05);
-    const t = clock.elapsedTime;
+    const dt = Math.min(timer.getDelta(), 0.05);
+    const t = timer.elapsedTime;
 
     if (!reduced) {
       rings.forEach((r, i) => {
