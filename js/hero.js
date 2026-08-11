@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion } from './core.js';
+import { createRenderer, watchResize, loadTexture, addStars, loopWhenVisible, disposeScene, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion, createTimer } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* HERO: dupla hélice de DNA feita de fotos do repositório (loop)      */
@@ -97,8 +97,7 @@ async function initHero() {
   helix.add(ringA);
   helix.add(ringB);
 
-  const timer = new THREE.Timer();
-  timer.start();
+  const timer = createTimer();
   const reduced = prefersReducedMotion();
 
   const renderFrame = () => {
@@ -162,7 +161,7 @@ async function initHero() {
 async function carrossel() {
   const mount = document.getElementById('carrossel-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = await createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0.8, 6);
@@ -179,8 +178,7 @@ async function carrossel() {
 
   addStars(scene, 300, 16);
 
-  const timer = new THREE.Timer();
-  timer.start();
+  const timer = createTimer();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(timer.getDelta(), 0.05);

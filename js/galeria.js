@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from './build/OrbitControls.js';
-import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, loadTexture, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion } from './core.js';
+import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, loadTexture, createTextureAtlas, createCarouselInstancedMesh, prefersReducedMotion, createTimer } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* GALERIA 3D: imagens em anel orbitante (interativo) — InstancedMesh  */
@@ -33,8 +33,7 @@ async function galeria() {
   setAtlas(atlasTexture);
   scene.add(mesh);
 
-  const timer = new THREE.Timer();
-  timer.start();
+  const timer = createTimer();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(timer.getDelta(), 0.05);
@@ -111,8 +110,7 @@ function beneficiosMini() {
       }).catch(() => {});
     });
 
-    const timer = new THREE.Timer();
-    timer.start();
+    const timer = createTimer();
     const stopLoop = loopWhenVisible(mount, () => {
       const dt = Math.min(timer.getDelta(), 0.05);
       if (!prefersReducedMotion()) {

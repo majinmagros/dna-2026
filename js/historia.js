@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, prefersReducedMotion } from './core.js';
+import { createRenderer, watchResize, addStars, loopWhenVisible, disposeScene, prefersReducedMotion, createTimer } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* TIMELINE 3D: anéis de partículas girando com os marcos do Krav-Maga */
@@ -60,10 +60,10 @@ function makeRing(radius, count, colorHex, spread = 1.4) {
   return { pts, geo, mat };
 }
 
-function timeline() {
+async function timeline() {
   const mount = document.getElementById('timeline-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = await createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 120);
   camera.position.set(0, 2.4, 13);
@@ -97,8 +97,7 @@ function timeline() {
     return sprite;
   });
 
-  const timer = new THREE.Timer();
-  timer.start();
+  const timer = createTimer();
   const reduced = prefersReducedMotion();
 
   const stopLoop = loopWhenVisible(mount, () => {

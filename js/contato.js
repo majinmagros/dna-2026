@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import { createRenderer, watchResize, addStars, loadTexture, loopWhenVisible, disposeScene, prefersReducedMotion } from './core.js';
+import { createRenderer, watchResize, addStars, loadTexture, loopWhenVisible, disposeScene, prefersReducedMotion, createTimer } from './core.js';
 
 /* ------------------------------------------------------------------ */
 /* PARTÍCULAS DNA: dupla hélice de pontos em looping no fundo          */
 /* ------------------------------------------------------------------ */
-function particulas() {
+async function particulas() {
   const mount = document.getElementById('particulas-canvas');
   if (!mount) return;
-  const { renderer, cleanup: cleanupRenderer } = createRenderer(mount);
+  const { renderer, cleanup: cleanupRenderer } = await createRenderer(mount);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(55, mount.clientWidth / mount.clientHeight, 0.1, 100);
   camera.position.set(0, 0, 9);
@@ -75,8 +75,7 @@ function particulas() {
       sprites.push(s);
     }).catch(() => {});
   });
-const timer = new THREE.Timer();
-  timer.start();
+  const timer = createTimer();
   const reduced = prefersReducedMotion();
   const stopLoop = loopWhenVisible(mount, () => {
     const dt = Math.min(timer.getDelta(), 0.05);

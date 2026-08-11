@@ -2,6 +2,16 @@ import * as THREE from 'three';
 
 export const TAU = Math.PI * 2;
 
+export function createTimer() {
+  let last = performance.now();
+  const t0 = last;
+  return {
+    start() { last = performance.now(); },
+    getDelta() { const now = performance.now(); const dt = (now - last) / 1000; last = now; return dt; },
+    get elapsedTime() { return (performance.now() - t0) / 1000; }
+  };
+}
+
 export function prefersReducedMotion() {
   return typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -249,7 +259,6 @@ export function createCarouselInstancedMesh(uvRects, count, baseWidth = 1.9, bas
   geometry.setAttribute('instanceUvOffset', new THREE.InstancedBufferAttribute(new Float32Array(count * 4), 4));
   geometry.setAttribute('instanceUvScale', new THREE.InstancedBufferAttribute(new Float32Array(count * 2), 2));
   geometry.setAttribute('instanceOpacity', new THREE.InstancedBufferAttribute(new Float32Array(count), 1));
-  geometry.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 
   const material = new THREE.MeshBasicNodeMaterial({
     transparent: true,
